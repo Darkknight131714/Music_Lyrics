@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'music.dart';
 import 'constants.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class SecondScreen extends StatefulWidget {
   DetailMusic music;
@@ -17,38 +18,74 @@ class _SecondScreenState extends State<SecondScreen> {
       appBar: AppBar(
         title: Text("Track Details"),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: SingleChildScrollView(
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                "Name",
-                style: kTitle,
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 2.0),
+                child: Text(
+                  widget.music.songName,
+                  style: GoogleFonts.roboto(
+                      fontSize: 24, fontWeight: FontWeight.w600),
+                ),
               ),
-              Text(widget.music.songName),
-              Text(
-                "Album Name",
-                style: kTitle,
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 2.0),
+                child: Text(
+                  widget.music.albumName,
+                  style: GoogleFonts.roboto(
+                      fontSize: 20, fontWeight: FontWeight.w500),
+                ),
               ),
-              Text(widget.music.albumName),
-              Text(
-                "Explicit",
-                style: kTitle,
+              SizedBox(
+                height: 20,
               ),
-              Text(widget.music.explicit.toString().toUpperCase()),
-              Text(
-                "Rating",
-                style: kTitle,
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 1.0),
+                child: Text(
+                  "Explicit",
+                  style: kTitle,
+                ),
               ),
-              Text(widget.music.rating),
-              Text(
-                "Lyrics",
-                style: kTitle,
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 1.0),
+                child: Text(widget.music.explicit.toString().toUpperCase()),
               ),
-              Text(widget.music.lyrics),
+              SizedBox(
+                height: 20,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 1.0),
+                child: Text(
+                  "Rating",
+                  style: kTitle,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 1.0),
+                child: Text(widget.music.rating),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 6.0),
+                child: Text(
+                  "Lyrics",
+                  style: kTitle,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 6.0),
+                child: Text(
+                  widget.music.lyrics,
+                  style: GoogleFonts.roboto(fontSize: 16, height: 1.4),
+                ),
+              ),
             ],
           ),
         ),

@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'package:flutter/cupertino.dart';
 import 'package:music_lyrics/book_screen.dart';
+import 'package:music_lyrics/internet.dart';
 
 import 'bookmark.dart';
 import 'package:provider/provider.dart';
@@ -11,7 +13,9 @@ import 'splash.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 
 bool val = true;
+bool theme = true;
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
 
@@ -23,13 +27,30 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  var subscription;
+  bool cond = true;
+  @override
+  void initState() {
+    super.initState();
+    subscription = Connectivity()
+        .onConnectivityChanged
+        .listen((ConnectivityResult result) {
+      if (result == ConnectivityResult.none) {
+        cond = true;
+      } else {
+        cond = false;
+      }
+      setState(() {});
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData.dark(),
+      theme: ThemeData.light(),
       home: Scaffold(
-        body: SplashScreen(),
+        body: cond ? InternetError() : SplashScreen(),
       ),
     );
   }
@@ -84,7 +105,8 @@ class _HommeState extends State<Homme> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData.dark(),
+      debugShowCheckedModeBanner: false,
+      theme: theme ? ThemeData.light() : ThemeData.dark(),
       title: 'Flutter Demo',
       home: ChangeNotifierProvider<BookMarkList>(
         create: (context) {
@@ -93,6 +115,21 @@ class _HommeState extends State<Homme> {
         child: Scaffold(
           appBar: AppBar(
             title: Text("Music List"),
+            actions: [
+              IconButton(
+                onPressed: () {
+                  setState(() {
+                    theme = !theme;
+                  });
+                },
+                icon: theme
+                    ? Icon(
+                        CupertinoIcons.moon_fill,
+                        color: Colors.white,
+                      )
+                    : Icon(CupertinoIcons.moon),
+              )
+            ],
           ),
           bottomNavigationBar: BottomNavigationBar(
             currentIndex: ind,
@@ -124,8 +161,23 @@ class _HommeState extends State<Homme> {
             ],
           ),
           body: cond
-              ? Center(
-                  child: Text("Offline"),
+              ? Scaffold(
+                  body: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Ooops!!",
+                          style: TextStyle(
+                              fontSize: 28, fontWeight: FontWeight.w800),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text("Check your Internet Connection")
+                      ],
+                    ),
+                  ),
                 )
               : PageView(
                   children: pages,
@@ -213,8 +265,9 @@ class _SecondBodyState extends State<SecondBody> {
               return Column(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(6.0),
                     child: Card(
+                      elevation: 5,
                       child: ListTile(
                         onTap: () async {
                           ScaffoldMessenger.of(context).showSnackBar(
@@ -266,8 +319,11 @@ class _SecondBodyState extends State<SecondBody> {
                           icon: (Provider.of<BookMarkList>(context)
                                   .trackIds
                                   .contains(music[index].stringID))
-                              ? Icon(Icons.bookmark)
-                              : Icon(Icons.bookmark_add),
+                              ? Icon(
+                                  Icons.bookmark_added_sharp,
+                                  color: Colors.blue,
+                                )
+                              : Icon(Icons.bookmark_add_outlined),
                         ),
                       ),
                     ),

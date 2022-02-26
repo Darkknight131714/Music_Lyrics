@@ -56,8 +56,9 @@ class _Book_ScreenState extends State<Book_Screen> {
           return Column(
             children: [
               Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(6.0),
                 child: Card(
+                  elevation: 5,
                   child: ListTile(
                     onTap: () async {
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -107,8 +108,8 @@ class _Book_ScreenState extends State<Book_Screen> {
                       icon: (Provider.of<BookMarkList>(context)
                               .trackIds
                               .contains(music[index].stringID))
-                          ? Icon(Icons.bookmark)
-                          : Icon(Icons.bookmark_add),
+                          ? Icon(Icons.bookmark_added_sharp)
+                          : Icon(Icons.bookmark_add_outlined),
                     ),
                   ),
                 ),
